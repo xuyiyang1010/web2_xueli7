@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>xueli07</title>
+	<meta charset="utf-8"/>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="animate.js"></script>
+</head>
+<body>
+<!--喇叭-->
+		<div id = "graywrap">
+			<div id = "gray" class = "gray">
+				<img id = "img1" src="images/a15.png">
+				<div id="boxhide">
+					<p id="words">[温馨提示]最近有不少非法分子在网上骗人，请大家注意！！！</p>
+				</div>
+				
+			</div>
+		</div>
+	<div id = "box" class = "box">
+		<!-- 轮播图 -->
+		<div id = "slider" class = "slider">
+			<div class = "slide"><img src="images/b5.png" alt = ""></div>
+			<div class = "slide"><img src="images/b1.png" alt = ""></div>
+			<div class = "slide"><img src="images/b2.png" alt = ""></div>
+			<div class = "slide"><img src="images/b3.png" alt = ""></div>
+			<div class = "slide"><img src="images/b4.png" alt = ""></div>
+			<div class = "slide"><img src="images/b5.png" alt = ""></div>
+			<div class = "slide"><img src="images/b1.png" alt = ""></div>
+		</div>
+		<!-- 两侧的左右按钮 -->
+		<span id = "left"><</span>
+		<span id = "right">></span>
+		<!-- 下面的圆点按钮 -->
+		<ul class = "nav" id = "nav">
+			<li class = "active">1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+		</ul>
+	</div>
+	<script>
+		var box = document.getElementById('box');
+		var oNavlist = document.getElementById('nav').children;
+		var slider = document.getElementById('slider');
+		var left = document.getElementById('left');
+		var right = document.getElementById('right');
+		var index = 1;
+		var isMoving = false;
+		//实现文字的轮播：
+		var words = document.getElementById('words');
+		window.onload = function(){
+			var timer1 = setInterval(function(){
+			var now = parseInt(getStyle(words,'left'));
+			if(now == -500){
+				clearInterval(timer);
+				words.style.left = "900px";
+			}
+			else{
+				words.style.left = now - 1 +"px";
+			}
+			},8);
+		}
+		
+		//轮播下一张的函数
+		//右：正确
+		function next(){
+			if(isMoving){
+				return;
+			}
+			isMoving = true;
+			index++;
+			navChange();
+			animate(slider,{left:-1200*index},function(){
+				if(index === 6){
+					slider.style.left = "-1200px";
+					index = 1;
+				}
+				isMoving = false;
+			});
+		}
+		//左：正确
+		function prev(){
+			if(isMoving){
+				return;
+			}
+			isMoving = true;
+			index--;
+			navChange();
+			animate(slider,{left:-1200*index},function(){
+				if(index === 0){
+					slider.style.left = "-6000px";
+					index = 5;
+				}
+				isMoving = false;
+			});
+		}
+		var timer = setInterval(next,2000);
+		//鼠标划入清定时器
+		box.onmouseover = function(){
+			animate(left,{opacity:50});
+			animate(right,{opacity:50}); 
+			clearInterval(timer);
+		}
+		//鼠标划出开定时器
+		box.onmouseout = function(){
+			animate(left,{opacity:0})
+			animate(right,{opacity:0})
+			timer = setInterval(next,200);//括号
+		}
+		right.onclick = next;//括号
+		left.onclick = prev;//括号
+
+		//小按钮点击事件:正确
+		for(var i = 0;i<oNavlist.length;i++){
+			oNavlist[i].idx = i;
+			oNavlist[i].onclick = function(){
+				index = this.idx + 1;
+				navChange();
+				animate(slider,{left:-1200*index});
+			}
+		}
+
+		//小按钮样式：背景色切换
+		function navChange(){
+			var oNavlist = document.getElementById('nav').children;
+			for(var i = 0;i<oNavlist.length;i++){
+				oNavlist[i].className = '';
+			}
+			if(index === 6){
+				oNavlist[0].className = 'active';
+			}else if(index === 0){
+				oNavlist[4].className = 'active';
+			}else{
+				oNavlist[index-1].className = 'active';
+			}
+			
+		}
+
+
+	</script>
+</body>
+</html>
